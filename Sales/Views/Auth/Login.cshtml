@@ -2,16 +2,17 @@
 @model Sales.Views.Auth.LoginModel
 @{
 }
-@{
-    ViewData["Title"] = "Home Page";
-}
+
 
 <main>
     <section class="auth">
         <form class="auth__form" asp-action="Login">
             <div>
-                <label asp-for="Promocode">Введите промокод</label>
-                <input type="text" asp-for="Promocode" />
+                <label >Введите промокод</label>
+                <input type="text" />
+            </div>
+            <div>
+                <a asp-action="Register" asp-controller="Auth">Получить промокод</a>
             </div>
         </form>
     </section>
