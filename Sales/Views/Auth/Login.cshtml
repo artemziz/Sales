@@ -3,15 +3,17 @@
 
 <main>
     <section class="auth">
-        <form asp-controller="Auth"  class="auth__form" asp-action="Login">
-            <div>
-                <label asp-for="Code" >Введите промокод</label>
-                <input asp-for="Code" type="text" />
+        <form asp-controller="Auth" class="auth__form" asp-action="Login">
+            <div class="mdl-textfield mdl-js-textfield">
+                <input asp-for="Code" class="mdl-textfield__input" type="text">
+                <label class="mdl-textfield__label" asp-for="Code">Введите промокод</label>
             </div>
-            <div>
-                <input type="submit" value="Войти" />
+            
+            <div class="auth__button">
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect" type="submit">Войти</button>
             </div>
-            <div>
+
+            <div class="auth__link">
                 <a asp-action="Register" asp-controller="Auth">Получить промокод</a>
             </div>
         </form>

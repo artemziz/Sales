@@ -9,5 +9,7 @@ namespace Sales.Models.ViewModels
     {
         public List<Books> Books { get; set; }
         public List<Books> Basket { get; set; }
+        public decimal TotalCost { get; set; }
+        public string Code { get; set; }
     }
 }

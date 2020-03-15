@@ -25,6 +25,25 @@ namespace Sales.Controllers
             cache = memoryCache;
         }
 
+        private bool BookAlreadyAdd(int id)
+        {
+            if (!(cache.Get(User.Identity.Name) as List<Books>)
+                .Contains(db.Books.FirstOrDefault(book => book.Id == id)))
+            {
+                return false;
+            }
+            else return true;
+        }
+        private decimal GetCost(List<Books> basket)
+        {
+            decimal totalCost = 0;
+            if (basket != null)
+            {
+                basket.ForEach(book => totalCost += book.Price);
+            }
+            return totalCost;
+        }
+
         [Authorize]
         
         public async Task<IActionResult> Index(int? id)
@@ -33,8 +52,12 @@ namespace Sales.Controllers
             {
                 if(cache.TryGetValue(User.Identity.Name,out List<Books> value))
                 {
-                    value.Add(await db.Books.FirstOrDefaultAsync(book => book.Id == id));
-                    cache.Set(User.Identity.Name, value);
+                    if(!BookAlreadyAdd((int)id))
+                    {
+                        value.Add(await db.Books.FirstOrDefaultAsync(book => book.Id == id));
+                        cache.Set(User.Identity.Name, value);
+                    }
+                    
                 }
                 else
                 {
@@ -44,7 +67,7 @@ namespace Sales.Controllers
                 }
                 
             }
-            var b = cache.Get(User.Identity.Name);
+            
             var basket  = cache.Get(User.Identity.Name)as List<Books>;
             var books = db.Books.ToList();
             if (basket != null)
@@ -57,21 +80,43 @@ namespace Sales.Controllers
                     }
                 });
             }
-            
+
             var shop = new Shop()
             {
                 Books = books,
-                Basket = basket==null?new List<Books>():basket
+                Basket = basket == null ? new List<Books>() : basket,
+                TotalCost = GetCost(basket),
+                Code = User.Identity.Name,
+                
             };
             return View(shop);
         }
-       
 
+        [Authorize]
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Order(int? id)
         {
-            return View();
+
+            var basket = cache.Get(User.Identity.Name) as List<Books>;
+            var promoId =( await db.Promocode.FirstOrDefaultAsync(promo => promo.Code == User.Identity.Name)).Id;
+            basket.ForEach(boughtBook =>
+            {
+                
+                (db.Books.FirstOrDefault(book => book.Id == boughtBook.Id)).Quantity-=1;
+                db.Orders.Add(new Orders()
+                {
+                    BookId = boughtBook.Id,
+                    PromoId = promoId,
+                }) ;
+            });
+            (await db.Promocode.FirstOrDefaultAsync(promo => promo.Code == User.Identity.Name)).IsUsed = true;
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("Logout", "Auth");
         }
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

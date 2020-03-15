@@ -82,10 +82,7 @@ namespace Sales.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Promocode user = await db.Promocode.FirstOrDefaultAsync(user => user.Code == User.Identity.Name);
-            user.IsUsed = true;
-            db.Promocode.Update(user);
-            await db.SaveChangesAsync();
+            
             return RedirectToAction("Login", "Auth");
         }
 
