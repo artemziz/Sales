@@ -1,15 +1,15 @@
-﻿@page
-@model Sales.Views.Auth.LoginModel
-@{
-}
-
+﻿
+@model Sales.Models.ViewModels.Login
 
 <main>
     <section class="auth">
-        <form class="auth__form" asp-action="Login">
+        <form asp-controller="Auth"  class="auth__form" asp-action="Login">
             <div>
-                <label >Введите промокод</label>
-                <input type="text" />
+                <label asp-for="Code" >Введите промокод</label>
+                <input asp-for="Code" type="text" />
+            </div>
+            <div>
+                <input type="submit" value="Войти" />
             </div>
             <div>
                 <a asp-action="Register" asp-controller="Auth">Получить промокод</a>

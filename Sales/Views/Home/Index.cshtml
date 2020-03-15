@@ -1,10 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model Sales.Models.ViewModels.Shop
 
 
 <main>
     <div>
-        <h1>All good</h1>
+        <a asp-controller="Auth" asp-action="Logout">Выйти</a>
     </div>
+    <div id="shop"></div>
+    <article>
+        @foreach (var book in Model.Books)
+        {
+            <section>
+                <h1>@book.Title</h1>
+                <h6>@book.Author</h6>
+                <a>@book.Quantity</a>
+                <a asp-route-id="@book.Id" asp-action="Index" asp-controller="Home">Купить @book.Price - руб</a>
+            </section>
+        }
+
+    </article>
+    <article>
+        <ul>
+            @foreach (var item in Model.Basket)
+            {
+                <li>
+                    @item.Title
+                </li>
+            }
+        </ul>
+    </article>
 </main>
