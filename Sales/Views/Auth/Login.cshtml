@@ -5,8 +5,10 @@
     <section class="auth">
         <form asp-controller="Auth" class="auth__form" asp-action="Login">
             <div class="mdl-textfield mdl-js-textfield">
+
                 <input asp-for="Code" class="mdl-textfield__input" type="text">
                 <label class="mdl-textfield__label" asp-for="Code">Введите промокод</label>
+                <span asp-validation-for="Code"></span>
             </div>
             
             <div class="auth__button">

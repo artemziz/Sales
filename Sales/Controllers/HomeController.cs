@@ -80,6 +80,16 @@ namespace Sales.Controllers
                     }
                 });
             }
+            if (books != null)
+            {
+                books.ForEach(book =>
+                {
+                    if (book.Quantity == 0)
+                    {
+                        books.Remove(book);
+                    }
+                });
+            }
 
             var shop = new Shop()
             {
