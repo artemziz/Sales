@@ -40,6 +40,7 @@ namespace Sales.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string Code)
         {
+            Code = Code.ToLower();
             if (Code != null)
             {
                 Promocode user = await db.Promocode.FirstOrDefaultAsync(user => user.Code == Code);
